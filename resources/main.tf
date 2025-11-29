@@ -1,4 +1,13 @@
+resource "azurerm_public_ip" "main" {
+  name                = "${var.component}-ip"
+  location            = data.azurerm_resource_group.example.location
+  resource_group_name = data.azurerm_resource_group.example.name
+  allocation_method   = "Static"
 
+  tags = {
+    environment = "var.component"
+  }
+}
 resource "azurerm_network_interface" "example" {
   name                = "${var.component}-nic"
   location              = data.azurerm_resource_group.example.location
@@ -8,19 +17,8 @@ resource "azurerm_network_interface" "example" {
     name                          = "internal"
     subnet_id                     = data.azurerm_subnet.example.id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id = "azurerm_public_ip.main.id "
+    public_ip_address_id = "azurerm_public_ip.main.id"
 
-  }
-}
-
-resource "azurerm_public_ip" "main" {
-  name                 = "${var.component}-ip"
-  location             = data.azurerm_resource_group.example.location
-  resource_group_name  = data.azurerm_resource_group.example.name
-  allocation_method    = "Static"
-
-  tags = {
-    environment = "var.component"
   }
 }
 
