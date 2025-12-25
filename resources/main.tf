@@ -1,12 +1,7 @@
-resource "azurerm_resource_group" "example" {
-  name     = "RG"
-  location = "UK West"
-}
-
 resource "azurerm_public_ip" "example" {
   name                = "${var.component}-ip"
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
+  location            = data.azurerm_resource_group.example.location
+  resource_group_name = data.azurerm_resource_group.example.name
   allocation_method   = "Static"
 
   tags = {
@@ -16,21 +11,21 @@ resource "azurerm_public_ip" "example" {
 resource "azurerm_virtual_network" "example" {
   name                = "example-network"
   address_space       = ["10.0.0.0/16"]
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
+  location            = data.azurerm_resource_group.example.location
+  resource_group_name = data.azurerm_resource_group.example.name
 }
 
 resource "azurerm_subnet" "example" {
   name                 = "internal"
-  resource_group_name  = azurerm_resource_group.example.name
+  resource_group_name = data.azurerm_resource_group.example.name
   virtual_network_name = azurerm_virtual_network.example.name
   address_prefixes     = ["10.0.2.0/24"]
 }
 
 resource "azurerm_network_interface" "example" {
   name                = "${var.component}-nic"
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
+  location            = data.azurerm_resource_group.example.location
+  resource_group_name = data.azurerm_resource_group.example.name
 
   ip_configuration {
     name                          = "internal"
@@ -43,8 +38,8 @@ resource "azurerm_network_interface" "example" {
 
 resource "azurerm_network_security_group" "main" {
   name                = "${var.component}-nsg"
-  resource_group_name = azurerm_resource_group.example.name
-  location            = azurerm_resource_group.example.location
+  location            = data.azurerm_resource_group.example.location
+  resource_group_name = data.azurerm_resource_group.example.name
 
   security_rule {
     name                       = "main"
@@ -70,8 +65,8 @@ resource "azurerm_network_interface_security_group_association" "main" {
 resource "azurerm_virtual_machine" "main" {
   depends_on            = [azurerm_network_interface_security_group_association.main]
   name                  = var.component
-  resource_group_name = azurerm_resource_group.example.name
-  location            = azurerm_resource_group.example.location
+  location            = data.azurerm_resource_group.example.location
+  resource_group_name = data.azurerm_resource_group.example.name
   network_interface_ids = [azurerm_network_interface.example.id]
   vm_size               = var.vm_size
 
