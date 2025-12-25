@@ -13,9 +13,5 @@ variable "component" {
       name    = "workstation"
       vm_size = "Standard_B4ms"
     }
-    mongodb = {
-      name = "vault"
-      vm_size = "Standard_B4ms"
-    }
   }
 }
