@@ -10,56 +10,12 @@ variable "component" {
   default = {
 
     frontend = {
-      name    = "frontend"
+      name    = "workstation"
       vm_size = "Standard_B4ms"
     }
     mongodb = {
-      name = "mongodb"
+      name = "vault"
       vm_size = "Standard_B4ms"
-    }
-    catalogue = {
-      name = "catalogue"
-      vm_size = "Standard_B4ms"
-    }
-
-    user = {
-      name = "user"
-      vm_size = "Standard_B4ms"
-    }
-
-    cart = {
-      name = "cart"
-      vm_size = "Standard_D2as_v4"
-    }
-
-    mysql = {
-      name = "mysql"
-      vm_size = "Standard_D2as_v4"
-    }
-
-    shipping = {
-      name = "shipping"
-      vm_size = "Standard_D2as_v4"
-    }
-
-    payment = {
-      name = "payment"
-      vm_size = "Standard_D2as_v4"
-    }
-
-    redis = {
-      name = "redis"
-      vm_size = "Standard_D2as_v4"
-    }
-
-    dispatch = {
-      name = "dispatch"
-      vm_size = "Standard_D2as_v4"
-    }
-
-    rabbitmq = {
-      name = "rabbitmq"
-      vm_size = "Standard_D2as_v4"
     }
   }
 }
