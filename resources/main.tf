@@ -63,41 +63,37 @@ resource "azurerm_network_interface_security_group_association" "main" {
   network_security_group_id = azurerm_network_security_group.main.id
 }
 resource "azurerm_virtual_machine" "main" {
-  depends_on            = [azurerm_network_interface_security_group_association.main]
   name                  = var.component
-  location            = data.azurerm_resource_group.example.location
-  resource_group_name = data.azurerm_resource_group.example.name
+  location              = data.azurerm_resource_group.example.location
+  resource_group_name   = data.azurerm_resource_group.example.name
   network_interface_ids = [azurerm_network_interface.example.id]
   vm_size               = var.vm_size
 
   # Uncomment this line to delete the OS disk automatically when deleting the VM
   delete_os_disk_on_termination = true
 
-  # Uncomment this line to delete the data disks automatically when deleting the VM
-  delete_data_disks_on_termination = true
 
   storage_image_reference {
-    publisher = "Canonical"
-    offer     = "0001-com-ubuntu-server-jammy"
-    sku       = "22_04-lts"
-    version   = "latest"
+    id = "/subscriptions/0aa6e6f6-6e44-47f7-b30d-2aa0dfd4e5f4/resourcegroups/RG/providers/Microsoft.Compute/galleries/image/images/custom/versions/1.0.0"
   }
+
+
   storage_os_disk {
-    name              = "${var.component}-osdisk"
+    name              = var.component
     caching           = "ReadWrite"
     create_option     = "FromImage"
     managed_disk_type = "Standard_LRS"
   }
-
   os_profile {
     computer_name  = var.component
-    admin_username = "Aarti"
+    admin_username = "aarti"
     admin_password = "Aarti@431721"
   }
   os_profile_linux_config {
     disable_password_authentication = false
   }
   tags = {
-    environment = var.component
+    component         = var.component
+    prometheus_scrape = "true"
   }
 }
